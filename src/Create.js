@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useNavigate} from 'react-router-dom';
 
 const Create = () => {
   const [todo, setTitle] = useState('');
   const [completed, setBody] = useState('');
   const [userId, setUserId] = useState('');
   const [isPending,setIsPending] = useState(false);
+  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,8 +18,12 @@ const Create = () => {
         headers:{ 'Content-Type':'application/json'},
         body:JSON.stringify(data)
     })
-    .then(setIsPending(false))
-    .then()
+    .then( () => {
+        setIsPending(false);
+        navigate.push('/')
+    });
+
+    
   }
 
   return (
