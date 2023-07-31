@@ -1,17 +1,17 @@
-import { useState,useEffect } from "react";
 import BlogList from "./BlogList";
-import useFecth from "./useFetch";
+import useFetch from "./useFetch";
 
 
 const Home = () => {
-    const { data: blogs, isPending,error} = useFecth('https://dummyjson.com/todo')
+    const { data, isPending,error} = useFetch('https://dummyjson.com/todo');
+    console.log(data)
 
 
     return ( 
         <div className="home">
             { error && <div>{ error}</div>}
             {isPending && <div>Loading...</div>}
-           {blogs && <BlogList  blogs={blogs} title='All Blogs' /> }
+           {data && <BlogList  blogs={data} title='All Blogs' /> }
         </div>
      );
 }

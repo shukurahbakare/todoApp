@@ -1,28 +1,39 @@
-import {useState,useEffect} from React;
-
-const [data,setData] = useState ([null]);
-const [isPending, setIsPending] = useState(true);
-const [error,setError] = useState(null)
+import {useState,useEffect} from 'react';
 
 
 const useFetch = (url) => {
+    const [data,setData] = useState ([null]);
+const [isPending, setIsPending] = useState(true);
+const [error,setError] = useState(null)
     useEffect(() => {
-        fetch(url)
+
+        const abortCont = new AbortController();
+
+        fetch(url, {signal: abortCont.signal})
             .then(res => {
                 if(!res.ok) {
                     throw Error ('The data is not available')
                 }
               return res.json()
             })
-            .  
-            then((data) => {
+            .then((data) => {
+                console.log(data);
                 setData(data.todos);
                 setIsPending(false);
                 setError(null)
              })
             .catch(err => {
-                setError(err.message)
-            })
+                if(err.name === 'AbortError'){
+
+                }
+                else{
+                    setIsPending(false);
+                setError(err.message);
+                }
+                
+            });
+
+        return () => abortCont.abort()
     },[url]);
 
     return  {data,isPending,error}
